@@ -33,7 +33,7 @@ function GlobalStyle() {
 function Titulo(props) {
   const Tag = props.tag || 'h1';
   return (
-    <>
+    <div>
       <Tag>{props.children}</Tag>
       <style jsx>{`
             ${Tag} {
@@ -42,7 +42,7 @@ function Titulo(props) {
                 font-weight: 600;
             }
             `}</style>
-    </>
+    </div>
   );
 }
 
@@ -68,7 +68,7 @@ export default function PaginaInicial() {
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: appConfig.theme.colors.primary[300],
+          backgroundColor: appConfig.theme.colors.primary[400],
           backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
           backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
         }}
