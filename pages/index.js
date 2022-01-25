@@ -1,34 +1,7 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
-
-function GlobalStyle() {
-  return (
-    <style global jsx>{`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-      /* App fit Height */ 
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */ 
-    `}</style>
-  );
-}
+import React from 'react';
+import {useRouter} from 'next/router'
 
 function Titulo(props) {
   const Tag = props.tag || 'h1';
@@ -60,16 +33,16 @@ function Titulo(props) {
 // export default HomePage
 
 export default function PaginaInicial() {
-  const username = 'MarcelloCavazza';
+  const [username, setUsername] = React.useState('MarcelloCavazza');
+  const roteamento = useRouter();
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: appConfig.theme.colors.primary[400],
-          backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
+          backgroundColor: appConfig.theme.colors.primary['050'],
+          backgroundImage: 'url(https://exame.com/wp-content/uploads/2019/11/meditaccca7acc83o.jpg)',
           backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
         }}
       >
@@ -91,6 +64,11 @@ export default function PaginaInicial() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={ function (infosDoEvento){
+                infosDoEvento.preventDefault();
+                console.log('usuario submeteu');
+                roteamento.push('/chat')
+            }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -100,8 +78,20 @@ export default function PaginaInicial() {
             <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[400] }}>
               {appConfig.name}
             </Text>
-
+            {/* <input 
+              type="text"
+              value={username}  
+              onChange={function (event){
+                const valor = event.target.value;
+                setUsername(valor);
+              }}
+            /> */}
             <TextField
+              value={username}
+              onChange={function (event){
+                const valor = event.target.value;
+                setUsername(valor);
+              }}
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -113,12 +103,13 @@ export default function PaginaInicial() {
               }}
             />
             <Button
+              disabled={username.length < 3}
               type='submit'
               label='Entrar'
               fullWidth
               buttonColors={{
                 contrastColor: appConfig.theme.colors.neutrals["000"],
-                mainColor: appConfig.theme.colors.primary[500],
+                mainColor: appConfig.theme.colors.primary["050"],
                 mainColorLight: appConfig.theme.colors.primary[400],
                 mainColorStrong: appConfig.theme.colors.primary[600],
               }}
@@ -150,6 +141,7 @@ export default function PaginaInicial() {
               }}
               src={`https://github.com/${username}.png`}
             />
+            
             <Text
               variant="body4"
               styleSheet={{
