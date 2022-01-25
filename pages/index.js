@@ -33,9 +33,8 @@ function Titulo(props) {
 // export default HomePage
 
 export default function PaginaInicial() {
-  const [username, setUsername] = React.useState('MarcelloCavazza');
+  const [username, setUsername] = React.useState('');
   const roteamento = useRouter();
-
   return (
     <>
       <Box
@@ -139,7 +138,9 @@ export default function PaginaInicial() {
                 borderRadius: '50%',
                 marginBottom: '16px',
               }}
-              src={`https://github.com/${username}.png`}
+              src={username.length > 2
+                ? `https://github.com/${username}.png`
+                : `https://cdn.iconscout.com/icon/free/png-256/user-1373-433436.png`}
             />
             
             <Text
