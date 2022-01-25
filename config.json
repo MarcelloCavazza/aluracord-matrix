@@ -1,9 +1,9 @@
 {
-    "name": "Chat Online",
+    "name": "Chat Online sobre Meditação",
     "theme": {
         "colors": {
             "primary": {
-                "050": "#E3F9E5",
+                "050": "#14BFE1",
                 "100": "#C1EAC5",
                 "200": "#A3D9A5",
                 "300": "#F7F052",
