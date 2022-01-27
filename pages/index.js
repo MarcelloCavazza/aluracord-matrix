@@ -1,7 +1,7 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
 import React from 'react';
-import {useRouter} from 'next/router'
+import {useRouter} from 'next/router';
 
 function Titulo(props) {
   const Tag = props.tag || 'h1';
@@ -33,7 +33,7 @@ function Titulo(props) {
 // export default HomePage
 
 export default function PaginaInicial() {
-  const [username, setUsername] = React.useState('');
+  const [username, setUsername] = React.useState('MarcelloCavazza');
   const roteamento = useRouter();
   return (
     <>
@@ -50,6 +50,7 @@ export default function PaginaInicial() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            opacity:'0.95',
             flexDirection: {
               xs: 'column',
               sm: 'row',
@@ -65,8 +66,7 @@ export default function PaginaInicial() {
             as="form"
             onSubmit={ function (infosDoEvento){
                 infosDoEvento.preventDefault();
-                console.log('usuario submeteu');
-                roteamento.push('/chat')
+                roteamento.push(`/chat?username=${username}`);
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -74,8 +74,11 @@ export default function PaginaInicial() {
             }}
           >
             <Titulo tag="h2">Boas vindas de volta!</Titulo>
-            <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[400] }}>
+            <Text variant="body3" styleSheet={{color: appConfig.theme.colors.neutrals[400] }}>
               {appConfig.name}
+            </Text>
+            <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[400] }}>
+              {appConfig.instruction}
             </Text>
             {/* <input 
               type="text"
@@ -86,6 +89,7 @@ export default function PaginaInicial() {
               }}
             /> */}
             <TextField
+              
               value={username}
               onChange={function (event){
                 const valor = event.target.value;
@@ -101,6 +105,7 @@ export default function PaginaInicial() {
                 },
               }}
             />
+            <id_name_hidden tag="input" type="hidden" value=""/>
             <Button
               disabled={username.length < 3}
               type='submit'

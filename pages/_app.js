@@ -23,12 +23,16 @@ function GlobalStyle() {
           flex: 1;
         }
         /* ./App fit Height */ 
+        ::-webkit-scrollbar {
+          display: none;
+        }
       `}</style>
     );
   }
 export default function MyApp({Component,pageProps}){
     return(
         <>
+        
         <GlobalStyle />
         <Component {...pageProps}/>
         </>
