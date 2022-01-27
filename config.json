@@ -1,5 +1,6 @@
 {
     "name": "Chat Online sobre Meditação",
+    "instruction": "Digite seu usuário Git", 
     "theme": {
         "colors": {
             "primary": {
