@@ -2,25 +2,51 @@ import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import { useRouter, withRouter } from 'next/router';
 import React from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ2NDE5OCwiZXhwIjoxOTU5MDQwMTk4fQ.4WAp8Z9_q6nActf4hKwPGzUVwLxO9mnEUgKfi8ReW9c';
+const SUPABASE_URL = 'https://peibyntkmkajkbvmncka.supabase.co';
+
+const supabaseClient = createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+
 
 
 export default function ChatPage() {
     // Sua lógica vai aqui
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
+    React.useEffect(()=>{
+        const dadosDoSubaBase = supabaseClient
+            .from('mensagens')
+            .select('*')
+            .order('id',{ascending: false})
+            .then(({data})=>{
+                setListaDeMensagens(data)
+            });
+    },[]);
+
     // ./Sua lógica vai aqui
     const router = useRouter();
-    const {username} = router.query;
+    const { username } = router.query;
+
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            id: listaDeMensagens.length + 1,
+            //id: listaDeMensagens.length + 1,
             de: username,
             texto: novaMensagem,
         }
-        setListaDeMensagens([
-            mensagem,
-            ...listaDeMensagens,
-        ])
+        supabaseClient
+        .from('mensagens')
+        .insert([
+            mensagem
+        ]).then(({data})=>{
+            setListaDeMensagens([
+                data[0],
+                ...listaDeMensagens,
+           ])
+        })
+        
         setMensagem('');
     }
 
@@ -69,7 +95,7 @@ export default function ChatPage() {
                                 {mensagemAtual.de}: {mensagemAtual.texto}
                             </li>
                         )
-                    })} */}
+                                })} */} 
                     <Box
                         as="form"
                         styleSheet={{
@@ -77,6 +103,7 @@ export default function ChatPage() {
                             alignItems: 'center',
                         }}
                     >
+                        
                         <TextField
                             value={mensagem}
                             onChange={(event) => {
@@ -102,6 +129,20 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+                        <Button iconName = "arrowRight"
+                            styleSheet = {
+                                {
+                                    backgroundColor: '#207227',
+                                    hover: { backgroundColor: '#05400A' },
+                                    focus: { backgroundColor: '#05400A' },
+                                }
+                            }
+                            onClick = {
+                                (event) => {
+                                    event.preventDefault();
+                                    handleNovaMensagem(mensagem);
+                                }
+                        }/>
                     </Box>
                 </Box>
             </Box>
