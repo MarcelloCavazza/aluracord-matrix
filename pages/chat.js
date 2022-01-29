@@ -3,6 +3,7 @@ import { useRouter, withRouter } from 'next/router';
 import React from 'react';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
+import { ButtonSendSticker } from "../src/components/ButtonSendSticker"
 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ2NDE5OCwiZXhwIjoxOTU5MDQwMTk4fQ.4WAp8Z9_q6nActf4hKwPGzUVwLxO9mnEUgKfi8ReW9c';
 const SUPABASE_URL = 'https://peibyntkmkajkbvmncka.supabase.co';
@@ -103,7 +104,7 @@ export default function ChatPage() {
                             alignItems: 'center',
                         }}
                     >
-                        
+                        <ButtonSendSticker/>
                         <TextField
                             value={mensagem}
                             onChange={(event) => {
@@ -135,6 +136,7 @@ export default function ChatPage() {
                                     backgroundColor: '#207227',
                                     hover: { backgroundColor: '#05400A' },
                                     focus: { backgroundColor: '#05400A' },
+                                    top: '-0.4vw',
                                 }
                             }
                             onClick = {
