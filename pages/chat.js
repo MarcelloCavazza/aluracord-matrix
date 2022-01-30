@@ -11,12 +11,21 @@ const SUPABASE_URL = 'https://peibyntkmkajkbvmncka.supabase.co';
 const supabaseClient = createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
 
-
+function escutaMsgEmTempoReal(adicionaMensagem) { 
+    return supabaseClient
+    .from('mensagens')
+    .on('INSERT',(respostaLive)=>{
+        adicionaMensagem(respostaLive.new);
+    })
+    .subscribe();
+ }
 
 export default function ChatPage() {
     // Sua lógica vai aqui
     const [mensagem, setMensagem] = React.useState('');
-    const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
+    const [listaDeMensagens, setListaDeMensagens] = React.useState([
+       
+    ]);
     React.useEffect(()=>{
         const dadosDoSubaBase = supabaseClient
             .from('mensagens')
@@ -25,6 +34,15 @@ export default function ChatPage() {
             .then(({data})=>{
                 setListaDeMensagens(data)
             });
+
+        escutaMsgEmTempoReal((novaMensagem)=>{
+             setListaDeMensagens((valorAtual)=>{
+                return[
+                    novaMensagem,
+                     ...valorAtual,
+                ]
+             })
+        });
     },[]);
 
     // ./Sua lógica vai aqui
@@ -41,11 +59,10 @@ export default function ChatPage() {
         .from('mensagens')
         .insert([
             mensagem
-        ]).then(({data})=>{
-            setListaDeMensagens([
-                data[0],
-                ...listaDeMensagens,
-           ])
+        ])
+         .then(({data})=>{
+             console.log('craindo msg: '+ data)
+
         })
         
         setMensagem('');
@@ -104,7 +121,11 @@ export default function ChatPage() {
                             alignItems: 'center',
                         }}
                     >
-                        <ButtonSendSticker/>
+                        <ButtonSendSticker
+                            onStickerClick={(sticker)=>{
+                                handleNovaMensagem(':sticker:'+sticker)
+                            }}
+                        />
                         <TextField
                             value={mensagem}
                             onChange={(event) => {
@@ -171,7 +192,7 @@ function Header() {
 }
 
 function MessageList(props) {
-    console.log('MessageList', props);
+    // console.log('MessageList', props);
     return (
         <Box
             tag="ul"
@@ -227,7 +248,11 @@ function MessageList(props) {
                                 {(new Date().toLocaleDateString())}
                             </Text>
                         </Box>
-                        {mensagem.texto}
+                        {mensagem.texto.startsWith(':sticker:') ? (
+                            <Image src={mensagem.texto.replace(':sticker:', '')}/>
+                        ):(
+                            mensagem.texto
+                        )}
                     </Text>
                 )
             })}
